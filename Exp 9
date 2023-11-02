@@ -1,0 +1,141 @@
+/information of file
+/*import java.io.*;
+import java.util.*;
+public class FileDemo
+{
+public static void main(String[] args)
+{
+   Scanner obj = new Scanner(System.in);
+    System.out.println("enter the file name:");
+         String filename = obj.nextLine();
+         File f = new File(filename);
+         try
+         {
+            f.createNewFile();
+         }
+         catch(Exception e)
+         {
+         }
+         System.out.println("File Name:" +f.getName());
+         if(f.exists())
+         {
+            System.out.println(filename+" exists");
+         }
+         if(f.canRead())
+         {
+            System.out.println(filename+" readable");  
+         }
+          System.out.println(filename+" - length is" +f.length()+ "byte long");
+          if(f.canWrite())
+          {
+               System.out.println(filename+" writable");
+          }
+          else
+          {
+             System.out.println(filename+" not writable");  
+          }
+         
+}
+}*/
+// binary file
+/*import java.io.*;
+public class BinaryFileReadWrite
+{
+    public static void main(String[] args)
+    {
+        String inputFile ="input.bin";
+        String outputFile ="output.bin";
+        try(FileInputStream inputstream =new  FileInputStream(inputFile);FileOutputStream outputstream =new  FileOutputStream(outputFile))
+        {
+            int byteData;
+            while((byteData=inputstream.read())!=-1)
+            {
+                byte modifiedByte=(byte)(byteData+1);
+               try(OutputStreamWriter writer =new OutputStreamWriter(outputstream))
+               {
+                   writer.write(modifiedByte);
+               }
+            }
+        }
+        catch( IOException e)
+        {
+            e.printStackTrace();
+        }
+       
+    }
+}*/
+//faculty class program
+import java.io.*;
+import java.util.Scanner;
+class Faculty implements Serializable
+{
+     int code;
+     String name;
+     String dept;
+     String position;
+    public Faculty(int code,String name, String dept, String position)
+    {
+        this.code= code;
+        this.name =name;
+        this.dept = dept;
+        this.position = position;
+    }
+    public String toString()
+    {
+        return "code:" +code +" name:" +name +"department:" +dept +"position" + position ;
+    }
+}
+public class FileConcept
+{
+    public static void main(String[] args)
+    {
+       Scanner obj =new Scanner (System.in);
+       System.out.println("enter the no of faculty:");
+       int n=obj.nextInt();
+       try(FileOutputStream fs= new FileOutputStream("faculty details.txt");ObjectOutputStream os= new ObjectOutputStream(fs) )
+       {
+           for(int i=0;i<n;i++)
+           {
+              System.out.println("enter the faculty details:");
+              System.out.println("enter the code :");
+              int code = obj.nextInt();
+              System.out.println("name :");
+              String name =obj.nextLine();
+              System.out.println("department:");
+              String dept =obj.nextLine();
+              System.out.println("position :");
+              String position = obj.nextLine();
+              Faculty fa =new Faculty(code,name,dept,position);
+              os.writeObject(fa);
+           }
+          System.out.println(" file stored ");
+       }
+       catch( IOException e)
+       {
+         e.printStackTrace();
+       }
+       System.out.println("enter thefaculty to be search :");
+       int search =obj.nextInt();
+       try(FileInputStream fi = new FileInputStream ("faculty details.txt");ObjectInputStream oi = new ObjectInputStream(fi))
+       {
+           while(true)
+           {
+              Faculty fa=(Faculty)oi.readObject();
+               if(fa.code==search)
+               {
+                System.out.println(" faculty information:");  
+                System.out.println(fa);
+                break;
+               }
+           }
+       }
+       catch(EOFException|ClassNotFoundException e)
+       {
+           System.out.println("enter thefaculty to be search :" + search);
+       }
+       catch(IOException e)
+       {
+           e.printStackTrace();
+       }
+    }
+}
